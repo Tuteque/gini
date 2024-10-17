@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  mongo:
+    image: mongo:latest
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: JuanP
+      MONGO_INITDB_ROOT_PASSWORD: JuanPP
+    volumes:
+      - mongo_data:/data/db
+
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx:/usr/share/nginx/html
+
+  node:
+    build: ./node
+    ports:
+      - "3000:3000"
+    environment:
+      MONGO_URI: mongodb+srv://JuanP:JuanPP@aramburu.8rqy4.mongodb.net/?retryWrites=true&w=majority&appName=Aramburu
+    depends_on:
+      - mongo
+
+volumes:
+  mongo_data:
